@@ -1,0 +1,7 @@
+.selecionado {
+  background-color: gray;
+}
+
+.riscado {
+  text-decoration: line-through;
+};
