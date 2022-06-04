@@ -1,6 +1,8 @@
 const botaoNTarefa = document.getElementById('criar-tarefa');
 const botaoApagaTarefas = document.getElementById('apaga-tudo');
-const botaoApagaTarefasFinalizadas = document.getElementById('remover-finalizados');
+const botaoApagaTarefasFinalizadas = document.getElementById(
+  'remover-finalizados'
+);
 const botaoMoverCima = document.getElementById('mover-cima');
 const botaoMoverBaixo = document.getElementById('mover-baixo');
 const botaoApagarSelecionado = document.getElementById('remover-selecionado');
@@ -26,7 +28,7 @@ function riscaItemLista() {
   }
 }
 
-function apagaItens (classe) {
+function apagaItens(classe) {
   const tamanhoLista = listaTarefas.children.length;
   const listaTarefasDeletadas = document.querySelectorAll(classe);
   if (classe === undefined) {
@@ -80,36 +82,53 @@ botaoSalvarTarefas.addEventListener('click', () => {
   salvaTarefaLocalStorage();
 });
 
-function moverSelecionado(direcao) {
-  for (let i = 0; i < listaTarefas.children.length; i += 1) {
+function moverSelecionadoCima() {
+  for (let i = 0; i < listaTarefas.children.length; i += 1) { //melhorar incluir naveção pelo NODE, já que o qerry pega o elemento selecionado sem precisar desse for
     if (listaTarefas.children[i].classList.contains('selecionado') === true) {
       let itemTemp = document.createElement('li');
       itemTemp.classList = listaTarefas.children[i].classList;
       itemTemp.innerText = listaTarefas.children[i].innerText;
-      // if (inicioOuFinal(i, listaTarefas.children.length) !== true) {
-      listaTarefas.children[i].classList = listaTarefas.children[i + 1].classList;
-      listaTarefas.children[i].innerText = listaTarefas.children[i + 1].innerText;
-      listaTarefas.children[i + 1].classList = itemTemp.classList;
-      listaTarefas.children[i + 1].innerText = itemTemp.innerText;
-      console.log(listaTarefas.children[i]);
-      console.log(listaTarefas.children[i + 1]);
-      break;
-      // }
+      if (i !== 0) {
+        listaTarefas.children[i].classList = listaTarefas.children[i - 1].classList;
+        listaTarefas.children[i].innerText = listaTarefas.children[i - 1].innerText;
+        listaTarefas.children[i - 1].classList = itemTemp.classList;
+        listaTarefas.children[i - 1].innerText = itemTemp.innerText;
+        console.log(listaTarefas.children[i]);
+        console.log(listaTarefas.children[i + 1]);
+        break;
+      }
+    }
+  }
+}
+
+function moverSelecionadoBaixo() {
+  for (let i = 0; i < listaTarefas.children.length; i += 1) { //melhorar incluir naveção pelo NODE, já que o qerry pega o elemento selecionado sem precisar desse for
+    if (listaTarefas.children[i].classList.contains('selecionado') === true) {
+      let itemTemp = document.createElement('li');
+      itemTemp.classList = listaTarefas.children[i].classList;
+      itemTemp.innerText = listaTarefas.children[i].innerText;
+      if (i !== (listaTarefas.children.length - 1)) {
+        listaTarefas.children[i].classList = listaTarefas.children[i + 1].classList;
+        listaTarefas.children[i].innerText = listaTarefas.children[i + 1].innerText;
+        listaTarefas.children[i + 1].classList = itemTemp.classList;
+        listaTarefas.children[i + 1].innerText = itemTemp.innerText;
+        console.log(listaTarefas.children[i]);
+        console.log(listaTarefas.children[i + 1]);
+        break;
+      }
     }
   }
 }
 
 botaoMoverBaixo.addEventListener('click', () => {
-  moverSelecionado('cima');
+  moverSelecionadoBaixo();
 });
 
 botaoMoverCima.addEventListener('click', () => {
-  moverSelecionado('baixo');
+  moverSelecionadoCima();
 });
 
-
-
-window.onload = function() {
+window.onload = function () {
   if (localStorage.getItem('tarefas') === null) {
     localStorage.setItem('tarefas', JSON.stringify([]));
     localStorage.setItem('classe', JSON.stringify([]));
